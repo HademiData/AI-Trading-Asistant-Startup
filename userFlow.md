@@ -1,3 +1,6 @@
+# Trading Strategy AI Startup - User Flow
+
+```mermaid
 graph TD
     Start[Start] --> Auth[User Authentication]
     Auth -->|Login| Dashboard[User Dashboard]
