@@ -1,84 +1,82 @@
 # Trading Strategy AI Startup - User Flow
 
 ```mermaid
+%%{init: {'theme':'base', 'themeVariables': { 'primaryColor': '#ffffff', 'primaryTextColor': '#000000', 'primaryBorderColor': '#000000', 'lineColor': '#000000', 'secondaryColor': '#ffffff', 'tertiaryColor': '#ffffff', 'background': '#ffffff', 'mainBkg': '#ffffff', 'secondBkg': '#ffffff', 'tertiaryBkg': '#ffffff'}}}%%
 graph TD
-    Start[Start] --> Auth[User Authentication]
-    Auth -->|Login| Dashboard[User Dashboard]
-    Auth -->|Register| Onboarding[User Onboarding]
-    Onboarding --> EmailVerification[Email Verification]
-    EmailVerification --> WelcomeTutorial[Welcome Tutorial]
-    WelcomeTutorial --> FeatureIntro[Feature Introduction]
-    FeatureIntro --> Dashboard
+    Start[User Starts] --> UI[Web App UI]
+    UI --> Auth{Authenticated?}
+    Auth -->|No| SignUp[Sign Up / Sign In]
+    Auth -->|Yes| StrategyInput[Strategy Input Phase]
     
-    Dashboard --> StrategyInput[Strategy Input Phase]
+    StrategyInput --> TextInput[Text Description Input]
+    StrategyInput --> ImageInput[Chart Image Upload - Max 2]
+    StrategyInput --> TimeframeInput[Timeframe Selection]
     
-    StrategyInput -->|Free Tier| TextInput[Text-based Strategy Description]
-    StrategyInput -->|Premium Tier| MultiModal[Multi-Modal Input Options]
+    TextInput --> BackendAPI[Backend API]
+    ImageInput --> BackendAPI
+    TimeframeInput --> BackendAPI
     
-    MultiModal --> TextDesc[Written Description]
-    MultiModal --> ImageUpload[Chart Image Upload]
-    MultiModal --> VideoUpload[Video Upload]
-    MultiModal --> AudioRec[Audio Recording]
+    BackendAPI --> MarketData[Market Data Fetcher]
+    BackendAPI --> LLMEngine[LLM Text Analysis]
+    BackendAPI --> VisionModel[Vision Model Processing]
+    BackendAPI --> TAEngine[Technical Analysis Engine]
     
-    TextInput --> BasicValidation[Basic AI Validation & Interpretation]
-    TextDesc --> AIAnalysis[AI Analysis & Learning]
-    ImageUpload --> AIAnalysis
-    VideoUpload --> AIAnalysis
-    AudioRec --> AIAnalysis
-    BasicValidation --> StrategyConfirmation[Strategy Confirmation]
-    AIAnalysis --> StrategyConfirmation
+    MarketData --> TAEngine
     
-    StrategyConfirmation --> AssetSelection[Asset Selection]
+    TAEngine --> PatternDetection[Pattern Detection - S/R, BOS, FVG, MSS]
+    LLMEngine --> TextAnalysis[Strategy Text Understanding]
+    VisionModel --> ImageAnalysis[Chart Image Analysis]
     
-    AssetSelection -->|Free Tier| LimitedAssets[Select up to 3 assets]
-    AssetSelection -->|Premium Tier| UnlimitedAssets[Select unlimited assets]
+    PatternDetection --> IntelligenceFusion[Intelligence Fusion]
+    TextAnalysis --> IntelligenceFusion
+    ImageAnalysis --> IntelligenceFusion
     
-    LimitedAssets --> BasicMonitoring[Basic Real-time Monitoring]
-    UnlimitedAssets --> AdvancedMonitoring[Advanced Real-time Monitoring]
+    IntelligenceFusion --> ChartRenderer[Chart Renderer with Levels]
+    IntelligenceFusion --> ReportGenerator[Strategy Analysis Report]
+    IntelligenceFusion --> RealtimeMonitor[Real-time Market Monitor]
     
-    BasicMonitoring --> BasicAlerts[Basic Email Alerts - 5/day]
-    AdvancedMonitoring --> AdvancedAlerts[Multi-Channel Alert System]
+    ChartRenderer --> UI
+    ReportGenerator --> UI
+    RealtimeMonitor --> AlertSystem[Alert System]
     
-    AdvancedAlerts --> EmailNotif[Email Notifications]
-    AdvancedAlerts --> TelegramBot[Telegram Bot]
-    AdvancedAlerts --> WhatsApp[WhatsApp Integration]
-    AdvancedAlerts --> PushNotif[In-app Push Notifications]
+    AlertSystem --> EmailAlerts[Email Notifications]
+    AlertSystem --> TelegramAlerts[Telegram Bot]
+    AlertSystem --> WhatsAppAlerts[WhatsApp Integration]
+    AlertSystem --> PushAlerts[In-app Push Notifications]
     
-    BasicAlerts --> Dashboard
-    EmailNotif --> Dashboard
-    TelegramBot --> Dashboard
-    WhatsApp --> Dashboard
-    PushNotif --> Dashboard
+    UI --> UserFeedback[User Feedback & Validation]
+    EmailAlerts --> UserFeedback
+    TelegramAlerts --> UserFeedback
+    WhatsAppAlerts --> UserFeedback
+    PushAlerts --> UserFeedback
     
-    Dashboard --> UpgradePrompt{Upgrade to Premium?}
-    UpgradePrompt -->|Yes| PaymentProcess[Payment Processing]
-    UpgradePrompt -->|No| Dashboard
+    UserFeedback --> IntelligenceFusion
     
-    PaymentProcess --> PremiumActivation[Premium Features Activation]
-    PremiumActivation --> Dashboard
+    SignUp --> UI
     
-    Dashboard --> PerformanceAnalytics[Strategy Performance & Analytics]
-    Dashboard --> SubscriptionManagement[Subscription Management]
-    
-    SubscriptionManagement --> ManageSubscription{Manage Subscription}
-    ManageSubscription -->|Upgrade| PaymentProcess
-    ManageSubscription -->|Downgrade| DowngradeFlow[Downgrade Process]
-    ManageSubscription -->|Cancel| CancelFlow[Cancellation Process]
-    
-    DowngradeFlow --> Dashboard
-    CancelFlow --> End[End]
-    
-    subgraph "Premium Features"
-    MultiModal
-    UnlimitedAssets
-    AdvancedMonitoring
-    AdvancedAlerts
-    PerformanceAnalytics
+    subgraph "AI Processing Layer"
+    LLMEngine
+    VisionModel
+    TAEngine
+    IntelligenceFusion
     end
     
-    subgraph "Free Features"
-    TextInput
-    LimitedAssets
-    BasicMonitoring
-    BasicAlerts
+    subgraph "Data Sources"
+    MarketData
+    PatternDetection
+    TextAnalysis
+    ImageAnalysis
+    end
+    
+    subgraph "Output Generation"
+    ChartRenderer
+    ReportGenerator
+    RealtimeMonitor
+    end
+    
+    subgraph "Alert Delivery"
+    EmailAlerts
+    TelegramAlerts
+    WhatsAppAlerts
+    PushAlerts
     end
