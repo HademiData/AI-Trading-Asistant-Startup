@@ -19,3 +19,4 @@ flowchart TD
     RENDER --> UI
     REPORT --> UI
     UI --> FB[User feedback]
+```
